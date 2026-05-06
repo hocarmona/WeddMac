@@ -10,9 +10,22 @@
 		6AA68A302FA985A000864191 /* WeddMac.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = WeddMac.app; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
+/* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
+		6AA68A8E2FAACF8F00864191 /* Exceptions for "WeddMac" folder in "WeddMac" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				Views/Vendors/Untitled.swift,
+			);
+			target = 6AA68A2F2FA985A000864191 /* WeddMac */;
+		};
+/* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
+
 /* Begin PBXFileSystemSynchronizedRootGroup section */
 		6AA68A322FA985A000864191 /* WeddMac */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
+			exceptions = (
+				6AA68A8E2FAACF8F00864191 /* Exceptions for "WeddMac" folder in "WeddMac" target */,
+			);
 			path = WeddMac;
 			sourceTree = "<group>";
 		};

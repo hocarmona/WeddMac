@@ -43,6 +43,7 @@ struct ContentView: View {
     @Query private var weddings: [Wedding]
 
     @State private var selectedSection: AppSection? = .vendors
+    @State private var selectedVendor: Vendor?
 
     var body: some View {
         NavigationSplitView {
@@ -56,7 +57,7 @@ struct ContentView: View {
         } content: {
             Group {
                 switch selectedSection {
-                case .vendors:   VendorsView()
+                case .vendors:   VendorListView(selectedVendor: $selectedVendor)
                 case .budget:    BudgetView()
                 case .documents: DocumentsView()
                 case .guests:    GuestsView()
@@ -66,12 +67,33 @@ struct ContentView: View {
             }
             .frame(minWidth: 320)
         } detail: {
-            Text("Selecciona un elemento")
-                .foregroundStyle(.secondary)
+            detailColumn
                 .frame(minWidth: 400)
         }
         .onAppear {
             ensureWeddingExists()
+        }
+        .onChange(of: selectedSection) { _, _ in
+            selectedVendor = nil
+        }
+    }
+
+    @ViewBuilder
+    private var detailColumn: some View {
+        switch selectedSection {
+        case .vendors:
+            if let vendor = selectedVendor {
+                VendorDetailView(vendor: vendor)
+            } else {
+                ContentUnavailableView(
+                    "Selecciona un proveedor",
+                    systemImage: "person.2",
+                    description: Text("Elige un proveedor de la lista para ver sus detalles.")
+                )
+            }
+        default:
+            Text("Selecciona un elemento")
+                .foregroundStyle(.secondary)
         }
     }
 
