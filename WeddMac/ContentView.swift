@@ -46,29 +46,12 @@ struct ContentView: View {
     @State private var selectedVendor: Vendor?
 
     var body: some View {
-        NavigationSplitView {
-            List(AppSection.allCases, selection: $selectedSection) { section in
-                NavigationLink(value: section) {
-                    Label(section.title, systemImage: section.symbol)
-                }
+        Group {
+            if selectedSection == .vendors {
+                vendorsLayout
+            } else {
+                fullWidthLayout
             }
-            .navigationTitle("Wedding")
-            .frame(minWidth: 180)
-        } content: {
-            Group {
-                switch selectedSection {
-                case .vendors:   VendorListView(selectedVendor: $selectedVendor)
-                case .budget:    BudgetView()
-                case .documents: DocumentsView()
-                case .guests:    GuestsView()
-                case .settings:  SettingsView()
-                case .none:      Text("Selecciona una sección")
-                }
-            }
-            .frame(minWidth: 320)
-        } detail: {
-            detailColumn
-                .frame(minWidth: 400)
         }
         .onAppear {
             ensureWeddingExists()
@@ -77,24 +60,71 @@ struct ContentView: View {
             selectedVendor = nil
         }
     }
-
-    @ViewBuilder
-    private var detailColumn: some View {
-        switch selectedSection {
-        case .vendors:
+    
+    // MARK: - Vendors Layout (3 columnas)
+    
+    private var vendorsLayout: some View {
+        NavigationSplitView {
+            sidebarContent
+        } content: {
+            VendorListView(selectedVendor: $selectedVendor)
+                .frame(minWidth: 320)
+        } detail: {
             if let vendor = selectedVendor {
                 VendorDetailView(vendor: vendor)
+                    .frame(minWidth: 400)
             } else {
                 ContentUnavailableView(
                     "Selecciona un proveedor",
                     systemImage: "person.2",
                     description: Text("Elige un proveedor de la lista para ver sus detalles.")
                 )
+                .frame(minWidth: 400)
             }
+        }
+    }
+    
+    // MARK: - Full Width Layout (2 columnas)
+    
+    private var fullWidthLayout: some View {
+        NavigationSplitView {
+            sidebarContent
+        } detail: {
+            fullWidthDetailContent
+        }
+    }
+    
+    @ViewBuilder
+    private var fullWidthDetailContent: some View {
+        switch selectedSection {
+        case .budget:
+            BudgetView()
+                .frame(minWidth: 600)
+        case .documents:
+            DocumentsView()
+                .frame(minWidth: 500)
+        case .guests:
+            GuestsView()
+                .frame(minWidth: 500)
+        case .settings:
+            SettingsView()
+                .frame(minWidth: 500)
         default:
-            Text("Selecciona un elemento")
+            Text("Selecciona una sección")
                 .foregroundStyle(.secondary)
         }
+    }
+    
+    // MARK: - Sidebar (compartido entre ambos layouts)
+    
+    private var sidebarContent: some View {
+        List(AppSection.allCases, selection: $selectedSection) { section in
+            NavigationLink(value: section) {
+                Label(section.title, systemImage: section.symbol)
+            }
+        }
+        .navigationTitle("Wedding")
+        .frame(minWidth: 180)
     }
 
     private func ensureWeddingExists() {

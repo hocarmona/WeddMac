@@ -14,6 +14,8 @@ final class Payment {
     var amount: Decimal
     var currency: String
     var paidDate: Date
+    var dueDate: Date?
+    var isPaid: Bool
     var paymentDescription: String?
     var paymentMethod: PaymentMethod
 
@@ -23,6 +25,8 @@ final class Payment {
         amount: Decimal,
         currency: String = "MXN",
         paidDate: Date = Date(),
+        dueDate: Date? = nil,
+        isPaid: Bool = true,
         paymentDescription: String? = nil,
         paymentMethod: PaymentMethod = .transfer,
         vendor: Vendor? = nil
@@ -31,6 +35,8 @@ final class Payment {
         self.amount = amount
         self.currency = currency
         self.paidDate = paidDate
+        self.dueDate = dueDate
+        self.isPaid = isPaid
         self.paymentDescription = paymentDescription
         self.paymentMethod = paymentMethod
         self.vendor = vendor

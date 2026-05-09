@@ -58,7 +58,9 @@ final class Vendor {
     }
 
     var totalPaid: Decimal {
-        payments.reduce(Decimal(0)) { $0 + $1.amount }
+        (payments ?? [])
+            .filter { $0.paidDate != nil }
+            .reduce(Decimal.zero) { $0 + $1.amount }
     }
 
     var balance: Decimal {
