@@ -29,7 +29,6 @@ struct BudgetView: View {
     
     private var totalPaid: Decimal {
         payments
-            .filter { $0.paidDate != nil }
             .reduce(Decimal.zero) { $0 + $1.amount }
     }
     
@@ -223,7 +222,6 @@ struct BudgetView: View {
         let now = Date()
         let in30 = Calendar.current.date(byAdding: .day, value: 30, to: now) ?? now
         return payments
-            .filter { $0.paidDate == nil }
             .compactMap { p -> (Payment, Date)? in
                 guard let due = p.dueDate, due >= now, due <= in30 else { return nil }
                 return (p, due)
@@ -256,7 +254,6 @@ struct BudgetView: View {
     
     private var recentPayments: [Payment] {
         payments
-            .filter { $0.paidDate != nil }
             .prefix(5)
             .map { $0 }
     }
