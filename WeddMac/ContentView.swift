@@ -132,6 +132,7 @@ struct ContentView: View {
         let wedding = Wedding()
         modelContext.insert(wedding)
         try? modelContext.save()
+        selectedSection = .settings
     }
 }
 
