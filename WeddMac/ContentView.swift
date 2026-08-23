@@ -42,18 +42,26 @@ struct ContentView: View {
     @Environment(\.modelContext) private var modelContext
     @Query private var weddings: [Wedding]
 
-    @State private var selectedSection: AppSection? = .vendors
+    @State private var selectedSection: AppSection = .vendors
 
     var body: some View {
         NavigationSplitView {
-            List(AppSection.allCases, selection: $selectedSection) { section in
-                NavigationLink(value: section) {
+            List(AppSection.allCases) { section in
+                Button {
+                    selectedSection = section
+                } label: {
                     Label(section.title, systemImage: section.symbol)
                 }
+                .buttonStyle(.plain)
+                .listRowBackground(
+                    selectedSection == section
+                        ? Color.accentColor.opacity(0.16)
+                        : Color.clear
+                )
             }
             .navigationTitle("Wedding")
             .frame(minWidth: 180)
-        } content: {
+        } detail: {
             Group {
                 switch selectedSection {
                 case .vendors:   VendorsView()
@@ -61,14 +69,9 @@ struct ContentView: View {
                 case .documents: DocumentsView()
                 case .guests:    GuestsView()
                 case .settings:  SettingsView()
-                case .none:      Text("Selecciona una sección")
                 }
             }
             .frame(minWidth: 320)
-        } detail: {
-            Text("Selecciona un elemento")
-                .foregroundStyle(.secondary)
-                .frame(minWidth: 400)
         }
         .onAppear {
             ensureWeddingExists()
@@ -85,5 +88,14 @@ struct ContentView: View {
 
 #Preview {
     ContentView()
-        .modelContainer(for: Item.self, inMemory: true)
+        .modelContainer(
+            for: [
+                Wedding.self,
+                Vendor.self,
+                Payment.self,
+                Contract.self,
+                Guest.self
+            ],
+            inMemory: true
+        )
 }

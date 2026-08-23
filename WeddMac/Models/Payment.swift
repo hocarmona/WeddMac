@@ -14,8 +14,14 @@ final class Payment {
     var amount: Decimal
     var currency: String
     var paidDate: Date
+    var dueDate: Date?
+    var isPaid: Bool = true
     var paymentDescription: String?
     var paymentMethod: PaymentMethod
+    var receiptFileName: String?
+
+    @Attribute(.externalStorage)
+    var receiptData: Data?
 
     var vendor: Vendor?
 
@@ -23,16 +29,24 @@ final class Payment {
         amount: Decimal,
         currency: String = "MXN",
         paidDate: Date = Date(),
+        dueDate: Date? = nil,
+        isPaid: Bool = true,
         paymentDescription: String? = nil,
         paymentMethod: PaymentMethod = .transfer,
+        receiptFileName: String? = nil,
+        receiptData: Data? = nil,
         vendor: Vendor? = nil
     ) {
         self.id = UUID()
         self.amount = amount
         self.currency = currency
         self.paidDate = paidDate
+        self.dueDate = dueDate
+        self.isPaid = isPaid
         self.paymentDescription = paymentDescription
         self.paymentMethod = paymentMethod
+        self.receiptFileName = receiptFileName
+        self.receiptData = receiptData
         self.vendor = vendor
     }
 }
